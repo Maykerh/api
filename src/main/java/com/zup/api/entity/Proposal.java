@@ -25,5 +25,9 @@ public class Proposal {
     private ProposalStatus status;
 
     @OneToOne
-    private Client client;
+    private Customer client;
+
+    public boolean validateClientDataIntegrity() {
+        return true;
+    }
 }

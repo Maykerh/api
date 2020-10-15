@@ -4,8 +4,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
-import com.zup.api.dto.ClientDTO;
+import com.zup.api.dto.CustomerDTO;
 import com.zup.api.service.ProposalService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,19 @@ public class ProposalController {
     private ProposalService proposalService;
 
     @PostMapping("/create")
-    public ResponseEntity<Object> newProposal(@Valid @RequestBody ClientDTO client) throws URISyntaxException {
-        this.proposalService.createNewProposal(client);
+    public ResponseEntity<Object> newProposal(@Valid @RequestBody CustomerDTO clientDTO) throws URISyntaxException {
+        this.proposalService.createNewProposal(clientDTO);
+
+        String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+
+        URI uri = new URI(baseUrl + "/proposal/address");
+
+        return ResponseEntity.created(uri).build();
+    }
+
+    @PostMapping("{id}/adress")
+    public ResponseEntity<Object> newProposal(@PathParam(value = "id") String proposalId, @Valid @RequestBody AddressDTO addressDTO) throws URISyntaxException {
+        this.proposalService.addAddress(proposalId, addressDTO);
 
         String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
 

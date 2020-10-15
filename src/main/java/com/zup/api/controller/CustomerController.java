@@ -1,7 +1,6 @@
 package com.zup.api.controller;
 
-import com.zup.api.repository.ClientRepository;
-import com.zup.api.entity.Client;
+import com.zup.api.entity.Customer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

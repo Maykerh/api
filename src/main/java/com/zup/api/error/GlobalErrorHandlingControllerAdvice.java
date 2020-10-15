@@ -1,7 +1,9 @@
 package com.zup.api.error;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -16,11 +18,11 @@ class GlobalErrorHandlingControllerAdvice {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ResponseBody
-	List<String> onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-		List<String> error = new ArrayList<String>();
+	Map<String, String> onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+		Map<String, String> error = new HashMap<String, String>();
 
 		for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-			error.add(fieldError.getDefaultMessage());
+			error.put(fieldError.getField(), fieldError.getDefaultMessage());
 		}
 
 		return error;
