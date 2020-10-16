@@ -1,15 +1,26 @@
 package com.zup.api.service;
 
+import java.util.Optional;
+import java.util.UUID;
+
+import com.zup.api.dto.AddressDTO;
 import com.zup.api.dto.CustomerDTO;
+import com.zup.api.entity.Address;
 import com.zup.api.entity.Customer;
 import com.zup.api.entity.Proposal;
+import com.zup.api.repository.AddressRepository;
 import com.zup.api.repository.CustomerRepository;
 import com.zup.api.repository.ProposalRepository;
 import com.zup.api.enumerator.ProposalStatus;
+import com.zup.api.error.exception.ProposalClientDataNotFoundException;
+import com.zup.api.error.exception.ProposalNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Serviço responsavel pelas etapas da solicitação de proposta de abertura de conta
+ */
 @Service
 public class ProposalService {
     @Autowired
@@ -18,28 +29,38 @@ public class ProposalService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public void createNewProposal(CustomerDTO clientDTO) {
-        Customer client = this.customerRepository.save(clientDTO.getEntity());
+    @Autowired
+    private AddressRepository addressRepository;
+
+    /**
+     * Primeiro passo - Criar a proposta e dados do cliente
+     */
+    public Proposal createNewProposal(CustomerDTO customerDTO) {
+        Customer customer = this.customerRepository.save(customerDTO.getEntity());
 
         Proposal proposal = new Proposal();
 
-        proposal.setStatus(ProposalStatus.CLIENT_DATA);
-        proposal.setClient(client);
-        
-        this.proposalRepository.save(proposal).toString();
+        proposal.setStatus(ProposalStatus.CLIENT_DATA_SAVED);
+        proposal.setClient(customer);
+
+        return this.proposalRepository.save(proposal);
     }
 
+    /**
+     * Segundo passo - Salvar o endereço do cliente
+     * 
+     * @throws ProposalNotFoundException
+     * @throws ProposalClientDataNotFoundException
+     */
     public void addAddress(String proposalId, AddressDTO addressDTO) {
-        Proposal proposal = proposalRepository.findOne(proposalId);
+        Proposal proposal = proposalRepository.findById(UUID.fromString(proposalId)).orElseThrow(() -> new ProposalNotFoundException());
+        
+        proposal.checkClientData();
 
-        // vericiar se criar um dto manualmente não vai dar problema no autowired das validações
-        // verificar somente o proposal status se está no passo certo e se acha os dados do cliente pelo id da proposta
-        if (!proposal.validateClientDataIntegrity()) {
+        Address address = addressDTO.getEntity();
 
-        }
+        address.setClient(proposal.getClient());
 
-        Address address = this.addressRepository.save(addressDTO.getEntity());
-
-
+        this.addressRepository.save(addressDTO.getEntity());
     }
 }

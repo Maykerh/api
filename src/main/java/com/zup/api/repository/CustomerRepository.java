@@ -1,14 +1,15 @@
 package com.zup.api.repository;
 
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
-
 import com.zup.api.entity.Customer;
-import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+public interface CustomerRepository extends JpaRepository<Customer, UUID> {
     Optional<Customer> findByEmail(String email);
 
     Optional<Customer> findByCpf(String cpf);
