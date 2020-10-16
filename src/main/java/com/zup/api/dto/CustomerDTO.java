@@ -3,10 +3,13 @@ package com.zup.api.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zup.api.entity.Customer;
 import com.zup.api.validation.MinimumAge;
 import com.zup.api.validation.UniqueCPF;
@@ -30,13 +33,14 @@ public class CustomerDTO implements DTOInterface {
 
     @NotNull(message = "Campo 'data de nascimento' é obrigatório")
     @MinimumAge
-    private String birthDate;
+    private LocalDate birthDate;
 
     @NotBlank(message = "Campo 'CPF' é obrigatório")
     @CPF(message = "CPF com formato inválido")
     @UniqueCPF
     private String cpf;
 
+    @Override
     public Customer getEntity() {
         ModelMapper modelMapper = new ModelMapper();
 

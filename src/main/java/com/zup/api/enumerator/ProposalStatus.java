@@ -1,10 +1,16 @@
 package com.zup.api.enumerator;
 
 /**
- * Andamento da proposta
- * 0 - Proposta criada com os dados do cliente (entity.Client)
- * 1 - Endereco do cliente ja cadastrado (entity.Address)
+ * Status do Andamento da proposta
  */
 public enum ProposalStatus {
-    CLIENT_DATA, CLIENT_ADDRRESS;
+    /**
+     * 0 - Proposta criada e dados basicos do cliente salvos com sucesso
+     */
+    CLIENT_DATA_SAVED,
+
+    /**
+     * 1 - Endereço do cliente cadastrado com sucesso
+     */
+    CLIENT_ADDRRESS_SAVED;
 }

@@ -6,16 +6,21 @@ import java.net.URISyntaxException;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
+import com.zup.api.dto.AddressDTO;
 import com.zup.api.dto.CustomerDTO;
+import com.zup.api.entity.Proposal;
+import com.zup.api.error.exception.ProposalNotFoundException;
+import com.zup.api.entity.Proposal;
 import com.zup.api.service.ProposalService;
+import com.zup.api.utils.URIBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/proposal")
@@ -25,23 +30,19 @@ public class ProposalController {
 
     @PostMapping("/create")
     public ResponseEntity<Object> newProposal(@Valid @RequestBody CustomerDTO clientDTO) throws URISyntaxException {
-        this.proposalService.createNewProposal(clientDTO);
+        Proposal proposal = this.proposalService.createNewProposal(clientDTO);
 
-        String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        URI locationURI = URIBuilder.getLocationURI("proposal/{id}/address/", proposal.getId().toString());
 
-        URI uri = new URI(baseUrl + "/proposal/address");
-
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(locationURI).build();
     }
 
-    @PostMapping("{id}/adress")
-    public ResponseEntity<Object> newProposal(@PathParam(value = "id") String proposalId, @Valid @RequestBody AddressDTO addressDTO) throws URISyntaxException {
+    @PostMapping("/{id}/address")
+    public ResponseEntity<Object> newProposal(@PathVariable(value = "id") String proposalId, @Valid @RequestBody AddressDTO addressDTO) throws URISyntaxException {
         this.proposalService.addAddress(proposalId, addressDTO);
 
-        String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        URI locationURI = URIBuilder.getLocationURI("proposal/{id}/document-image/", proposalId.toString());
 
-        URI uri = new URI(baseUrl + "/proposal/address");
-
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(locationURI).build();
     }
 }

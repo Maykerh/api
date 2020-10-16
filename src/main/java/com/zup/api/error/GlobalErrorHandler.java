@@ -1,9 +1,10 @@
 package com.zup.api.error;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import com.fasterxml.jackson.databind.JsonMappingException.Reference;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -14,10 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-class GlobalErrorHandlingControllerAdvice {
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
+class GlobalErrorHandler {
+
 	@ResponseBody
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MethodArgumentNotValidException.class)
 	Map<String, String> onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 		Map<String, String> error = new HashMap<String, String>();
 
@@ -26,7 +28,24 @@ class GlobalErrorHandlingControllerAdvice {
 		}
 
 		return error;
-  	}
-}
+	}
 
-// new Violation(fieldError.getField(), fieldError.getDefaultMessage()));
+	@ResponseBody
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(InvalidFormatException.class)
+	Map<String, String> onInvalidFormatException(InvalidFormatException e) {
+		Map<String, String> error = new HashMap<String, String>();
+
+		String fieldName = "";
+
+		for (Reference ref : e.getPath()) {
+			if (ref.getFieldName() != null) {
+				fieldName = ref.getFieldName();
+			}
+		};
+
+		error.put(fieldName, "Valor '" + e.getValue() + "' inválido");
+		
+		return error;
+	}
+}
