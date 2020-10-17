@@ -1,6 +1,8 @@
 package com.zup.api.error;
 
-import com.zup.api.error.exception.ProposalClientDataNotFoundException;
+import com.zup.api.error.exception.ProposalCustomerAddressNotFoundException;
+import com.zup.api.error.exception.ProposalCustomerAlreadyHasDocumentException;
+import com.zup.api.error.exception.ProposalCustomerDataNotFoundException;
 import com.zup.api.error.exception.ProposalNotFoundException;
 
 import org.springframework.http.ResponseEntity;
@@ -17,9 +19,20 @@ class ProposalErrorHandler {
 	}
     
     @ResponseBody
-	@ExceptionHandler(ProposalClientDataNotFoundException.class)
-	ResponseEntity<Object> onProposalClientDataNotFoundException(ProposalClientDataNotFoundException e) {
-
+	@ExceptionHandler(ProposalCustomerDataNotFoundException.class)
+	ResponseEntity<Object> onProposalClientDataNotFoundException(ProposalCustomerDataNotFoundException e) {
         return ResponseEntity.unprocessableEntity().body(e.getMessage());
+    }
+
+    @ResponseBody
+	@ExceptionHandler(ProposalCustomerAddressNotFoundException.class)
+	ResponseEntity<Object> onProposalCustomerAddressNotFoundException(ProposalCustomerAddressNotFoundException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ResponseBody
+	@ExceptionHandler(ProposalCustomerAlreadyHasDocumentException.class)
+	ResponseEntity<Object> onProposalCustomerAlreadyHasDocumentException(ProposalCustomerAlreadyHasDocumentException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

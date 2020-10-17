@@ -13,7 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import com.zup.api.enumerator.ProposalStatus;
-import com.zup.api.error.exception.ProposalClientDataNotFoundException;
+import com.zup.api.error.exception.ProposalCustomerAddressNotFoundException;
+import com.zup.api.error.exception.ProposalCustomerAlreadyHasDocumentException;
+import com.zup.api.error.exception.ProposalCustomerDataNotFoundException;
 
 @Entity
 @Getter @Setter
@@ -26,11 +28,27 @@ public class Proposal {
     private ProposalStatus status;
 
     @OneToOne
-    private Customer client;
+    private Customer customer;
 
-    public void checkClientData() throws ProposalClientDataNotFoundException {
-        if (!ProposalStatus.CLIENT_DATA_SAVED.equals(this.getStatus()) || this.getClient() == null) {
-            throw new ProposalClientDataNotFoundException();
+    public void checkCustomerDataStep() {
+        if (this.getStatus() == null || this.getStatus().ordinal() < ProposalStatus.CUSTOMER_DATA_SAVED.ordinal() || this.getCustomer() == null) {
+            throw new ProposalCustomerDataNotFoundException();
+        }
+    }
+
+    public void checkCustomerAddressStep() {
+        this.checkCustomerDataStep();
+
+        Address address = this.getCustomer().getAddress();
+
+        if (this.getStatus() == null || this.getStatus().ordinal() < ProposalStatus.CUSTOMER_ADDRESS_SAVED.ordinal() || address == null) {
+            throw new ProposalCustomerAddressNotFoundException();
+        }
+    }
+
+    public void checkCustomerAlreadyHasDocument() {
+        if (this.getCustomer().getDocumentImage() != null) {
+            throw new ProposalCustomerAlreadyHasDocumentException();
         }
     }
 }
