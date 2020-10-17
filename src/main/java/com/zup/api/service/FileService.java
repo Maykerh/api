@@ -36,11 +36,13 @@ public class FileService {
         try {
             String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
             String fileName = FilenameUtils.getBaseName(StringUtils.cleanPath(file.getOriginalFilename())) + System.currentTimeMillis();
-            String relativePath = FilenameUtils.separatorsToSystem(this.getUploadDir(extraPath) + File.separator + fileName + '.' + fileExtension);
+            String fullPath = FilenameUtils.separatorsToSystem(this.getUploadDir(extraPath));
 
-            Path filePath = Paths.get(relativePath);
+            this.validateDirectory(fullPath);
 
-            Files.copy(file.getInputStream(), filePath.toAbsolutePath().normalize(), StandardCopyOption.REPLACE_EXISTING);
+            Path fileFullPath = Paths.get(fullPath + File.separator + fileName + '.' + fileExtension);
+
+            Files.copy(file.getInputStream(), fileFullPath.toAbsolutePath().normalize(), StandardCopyOption.REPLACE_EXISTING);
 
             return fileName + '.' + fileExtension;
         } catch (Exception e) {
@@ -56,6 +58,14 @@ public class FileService {
         }
 
         return this.uploadFile(file, extraPath);
+    }
+
+    private void validateDirectory(String fullPath) {
+        File directory = new File(fullPath);
+
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
     }
 
     public String getUploadDir(String extraPath) {

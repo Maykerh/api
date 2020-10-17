@@ -73,7 +73,7 @@ public class ProposalService {
      * Terceiro passo - Salvar imagem do documento do cliente
      */
     public void addDocument(String proposalId, MultipartFile file) {
-        Proposal proposal = proposalRepository.findById(UUID.fromString(proposalId)).orElseThrow(() -> new ProposalNotFoundException());
+        Proposal proposal = this.proposalRepository.findById(UUID.fromString(proposalId)).orElseThrow(() -> new ProposalNotFoundException());
 
         proposal.checkCustomerAddressStep();
         proposal.checkCustomerAlreadyHasDocument();
@@ -85,5 +85,9 @@ public class ProposalService {
         customer.setDocumentImage(documentName);
 
         this.customerRepository.save(customer);
+
+        proposal.setStatus(ProposalStatus.CUSTOMER_DOCUMENT_SAVED);
+
+        this.proposalRepository.save(proposal);
     }
 }

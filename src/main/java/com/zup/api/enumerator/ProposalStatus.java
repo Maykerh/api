@@ -12,5 +12,10 @@ public enum ProposalStatus {
     /**
      * 1 - Endereço do cliente cadastrado com sucesso
      */
-    CUSTOMER_ADDRESS_SAVED;
+    CUSTOMER_ADDRESS_SAVED,
+
+    /**
+     * 2 - Documento do cliente cadastrado com sucesso
+     */
+    CUSTOMER_DOCUMENT_SAVED;
 }
