@@ -3,6 +3,8 @@ package com.zup.api.service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.zup.api.dto.request.AddressDTO;
 import com.zup.api.dto.request.CustomerDTO;
@@ -15,6 +17,7 @@ import com.zup.api.error.exception.ProposalCustomerDocumentNotFoundException;
 import com.zup.api.error.exception.ProposalNotFoundException;
 import com.zup.api.repository.AddressRepository;
 import com.zup.api.repository.CustomerRepository;
+import com.zup.api.repository.AccountRepository;
 import com.zup.api.repository.ProposalRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,9 @@ public class ProposalService {
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private AccountService accountService;
 
     @Value("${file.upload.customer-documents}")
     private String customerDocumentsDir;
@@ -109,7 +115,7 @@ public class ProposalService {
 
         ProposalDataDTO proposalDataDTO = new ProposalDataDTO();
         proposalDataDTO.setCustomer(CustomerDTO.fromEntity(customer));
-        proposalDataDTO.setAddress(AddressDTO.fromEntity(customer.getAddress());
+        proposalDataDTO.setAddress(AddressDTO.fromEntity(customer.getAddress()));
 
         return proposalDataDTO;
     }
@@ -129,8 +135,12 @@ public class ProposalService {
         proposal.setStatus(ProposalStatus.ACCEPTED);
         this.proposalRepository.save(proposal);
 
-        Map<String, String> response = new HashMap<String, String>();
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+		executor.execute(() -> {
+            this.accountService.createNewAccount(proposal);
+        });
 
+        Map<String, String> response = new HashMap<String, String>();
         response.put("message", "Proposta aceita com sucesso. Em breve você receberá um email com as informações da sua nova conta.");
 
         return response;

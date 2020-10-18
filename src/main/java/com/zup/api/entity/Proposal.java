@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import com.zup.api.enumerator.ProposalStatus;
@@ -30,6 +31,11 @@ public class Proposal {
     private ProposalStatus status;
 
     @OneToOne
+    @JoinColumn(name="account_id")
+    private Account account;
+
+    @OneToOne
+    @JoinColumn(name="customer_id")
     private Customer customer;
 
     public void checkCustomerDataStep() {
@@ -65,16 +71,26 @@ public class Proposal {
 	public void checkIfAllowAccept() {
         this.checkCustomerDocumentStep();
 
-        if (ProposalStatus.ACCEPTED.equals(this.getStatus())) {
+        if (ProposalStatus.DECLINED.equals(this.getStatus())) {
+            return;
+        }
+
+        if (this.getStatus().ordinal() >= ProposalStatus.ACCEPTED.ordinal()) {
             throw new ProposalAlreadyAcceptedException();
         }
     }
     
     public void checkIfAllowDecline() {
         this.checkCustomerDocumentStep();
+
+        if (ProposalStatus.DECLINED.equals(this.getStatus())) {
+            return;
+        }
         
-        if (ProposalStatus.ACCEPTED.equals(this.getStatus())) {
+        if (this.getStatus().ordinal() >= ProposalStatus.ACCEPTED.ordinal()) {
             throw new ProposalAlreadyAcceptedException();
         }
-	}
+    }
+    
+
 }
