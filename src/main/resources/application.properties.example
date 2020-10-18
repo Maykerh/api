@@ -3,10 +3,10 @@ file.upload-dir=src/main/java/com/zup/uploads
 file.upload.customer-documents=images/documents
 
 # Email
-spring.mail.host=smtp.mailtrap.io
-spring.mail.port=2525
-spring.mail.username=dd3e1601d78d38
-spring.mail.password=81b96796d2cc21
+spring.mail.host=""
+spring.mail.port=""
+spring.mail.username=""
+spring.mail.password=""
 
 # Database
 spring.datasource.url=jdbc:h2:file:~/test
