@@ -36,7 +36,8 @@ public class Customer {
 
     @Column(unique = true, nullable = false)
     private String cpf;
-
+    
+    @Column(unique = true)
     private String documentImage;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "customer")
