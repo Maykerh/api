@@ -20,12 +20,22 @@ public enum ProposalStatus {
     CUSTOMER_DOCUMENT_SAVED,
 
     /**
-     * 3 - Proposta aceita pelo cliente
+     * 3 - Proposta aceita pelo cliente e aguardando a validação externa
      */
     ACCEPTED,
 
     /**
      * 4 - Proposta recusada pelo cliente
      */
-    DECLINED;
+    DECLINED,
+
+    /**
+     * 5 - Validação externa recusada
+     */
+    EXTERNAL_VALIDATION_REFUSED,
+
+    /**
+     * 6 - Proposta finalizada e conta criada
+     */
+    ACCOUNT_CREATED;
 }

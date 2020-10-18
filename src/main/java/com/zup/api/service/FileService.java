@@ -52,6 +52,12 @@ public class FileService {
         }
     }
 
+    /**
+     * Faz o upload de um arquivo de imagem 
+     * @param file arquivo recebido no request
+     * @param extraPath path adicional
+     * @return nome do arquivo
+     */
     public String uploadImage(MultipartFile file, String extraPath) {
         if (!file.getContentType().equals("image/jpeg") && !file.getContentType().equals("image/png")) {
             throw new FileUploadException(file.getOriginalFilename());
@@ -81,9 +87,7 @@ public class FileService {
     }
 
     public String getFileNameHash(String fileName) {
-        String md5Hex = DigestUtils.md5Digest(fileName.getBytes()).toString();
-
-        return md5Hex;
+        return DigestUtils.md5Digest(fileName.getBytes()).toString();
     }
 
     public String getUploadDir(String extraPath) {
