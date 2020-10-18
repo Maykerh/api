@@ -17,5 +17,15 @@ public enum ProposalStatus {
     /**
      * 2 - Documento do cliente cadastrado com sucesso
      */
-    CUSTOMER_DOCUMENT_SAVED;
+    CUSTOMER_DOCUMENT_SAVED,
+
+    /**
+     * 3 - Proposta aceita pelo cliente
+     */
+    ACCEPTED,
+
+    /**
+     * 4 - Proposta recusada pelo cliente
+     */
+    DECLINED;
 }

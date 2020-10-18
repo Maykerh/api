@@ -1,4 +1,4 @@
-package com.zup.api.dto;
+package com.zup.api.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,17 +9,16 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zup.api.entity.Customer;
+import com.zup.api.utils.DTOMapper;
 import com.zup.api.validation.MinimumAge;
 import com.zup.api.validation.UniqueCPF;
 import com.zup.api.validation.UniqueEmail;
 
 import org.hibernate.validator.constraints.br.CPF;
-import org.modelmapper.ModelMapper;
 
 @Getter @Setter
-public class CustomerDTO implements DTOInterface {    
+public class CustomerDTO {    
     @NotBlank(message = "Campo 'nome' é obrigatório")
     private String name;
 
@@ -40,11 +39,12 @@ public class CustomerDTO implements DTOInterface {
     @UniqueCPF
     private String cpf;
 
-    @Override
-    public Customer getEntity() {
-        ModelMapper modelMapper = new ModelMapper();
-
-        return modelMapper.map(this, Customer.class);
+    public Customer toEntity() {
+       return (Customer) DTOMapper.toEntity(this, Customer.class);
     }
+
+    public static CustomerDTO fromEntity(Customer customer) {
+        return (CustomerDTO) DTOMapper.fromEntity(customer, CustomerDTO.class);
+	}
 }
 

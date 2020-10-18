@@ -1,18 +1,17 @@
-package com.zup.api.dto;
+package com.zup.api.dto.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.zup.api.utils.DTOMapper;
 import com.zup.api.entity.Address;
-
-import org.modelmapper.ModelMapper;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class AddressDTO implements DTOInterface {
+public class AddressDTO {
     @NotBlank(message = "Campo 'CEP' é obrigatório")
     @Pattern(regexp = "^\\d{5}[-]\\d{3}$", message = "Formato do CEP inválido")
     private String cep;
@@ -32,10 +31,11 @@ public class AddressDTO implements DTOInterface {
     @NotBlank(message = "Campo 'Estado' é obrigatório")
     private String state;
 
-    @Override
-    public Address getEntity() {
-        ModelMapper modelMapper = new ModelMapper();
-
-        return modelMapper.map(this, Address.class);
+    public Address toEntity() {
+        return (Address) DTOMapper.toEntity(this, Address.class);
+    }
+ 
+    public static AddressDTO fromEntity(Address address) {
+         return (AddressDTO) DTOMapper.fromEntity(address, AddressDTO.class);
     }
 }

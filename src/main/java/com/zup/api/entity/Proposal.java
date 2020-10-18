@@ -13,9 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import com.zup.api.enumerator.ProposalStatus;
+import com.zup.api.error.exception.ProposalAlreadyAcceptedException;
 import com.zup.api.error.exception.ProposalCustomerAddressNotFoundException;
 import com.zup.api.error.exception.ProposalCustomerAlreadyHasDocumentException;
 import com.zup.api.error.exception.ProposalCustomerDataNotFoundException;
+import com.zup.api.error.exception.ProposalCustomerDocumentNotFoundException;
 
 @Entity
 @Getter @Setter
@@ -51,4 +53,28 @@ public class Proposal {
             throw new ProposalCustomerAlreadyHasDocumentException();
         }
     }
+
+    public void checkCustomerDocumentStep() {
+        this.checkCustomerAddressStep();
+
+        if (this.getStatus() == null || this.getStatus().ordinal() < ProposalStatus.CUSTOMER_DOCUMENT_SAVED.ordinal() || this.getCustomer().getDocumentImage() == null) {
+            throw new ProposalCustomerDocumentNotFoundException();
+        }
+    }
+
+	public void checkIfAllowAccept() {
+        this.checkCustomerDocumentStep();
+
+        if (ProposalStatus.ACCEPTED.equals(this.getStatus())) {
+            throw new ProposalAlreadyAcceptedException();
+        }
+    }
+    
+    public void checkIfAllowDecline() {
+        this.checkCustomerDocumentStep();
+        
+        if (ProposalStatus.ACCEPTED.equals(this.getStatus())) {
+            throw new ProposalAlreadyAcceptedException();
+        }
+	}
 }
