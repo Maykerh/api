@@ -25,3 +25,11 @@ Na raiz do projeto, executar o comando abaixo para subir o Spring
 ```bash
 ./mvnw org.springframework.boot:spring-boot-maven-plugin:run
 ```
+
+## :heavy_check_mark: Teste
+
+A documentação da api pode ser consultada no Swagger
+
+```bash
+http://localhost:8080/swagger-ui.html
+```
