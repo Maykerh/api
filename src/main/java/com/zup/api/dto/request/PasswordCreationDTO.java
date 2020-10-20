@@ -12,10 +12,6 @@ import lombok.Setter;
 
 @Getter @Setter
 public class PasswordCreationDTO {
-    @NotBlank(message = "Campo 'email' é obrigatório")
-    @Email(message = "Email com formato inválido")
-    private String email;
-
     @NotBlank(message = "Campo 'CPF' é obrigatório")
     @CPF(message = "CPF com formato inválido")
     private String cpf;
