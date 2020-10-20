@@ -33,3 +33,9 @@ A documentação da api pode ser consultada no Swagger
 ```bash
 http://localhost:8080/swagger-ui.html
 ```
+
+Para o banco de dados foi utilizado o H2. O login e senha podem ser consultados no arquivo application.properties
+
+```bash
+http://localhost:8080/h2-console/login.jsp
+```
