@@ -18,6 +18,10 @@ public class UniqueCPFValidator implements ConstraintValidator<UniqueCPF, String
 
     @Override
     public boolean isValid(String cpf, ConstraintValidatorContext context) {
+        if (cpf == null) {
+            return false;
+        }
+        
         cpf = cpf.replace(".", "").replace("-", "");
 
         Optional<Customer> client = this.customerRepository.findByCpf(cpf);
