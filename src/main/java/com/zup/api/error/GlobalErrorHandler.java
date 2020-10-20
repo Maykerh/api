@@ -5,9 +5,12 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.zup.api.error.exception.CustomerDataNotFoundException;
 import com.zup.api.error.exception.FileUploadException;
+import com.zup.api.error.exception.InvalidValidationTokenException;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -70,6 +73,22 @@ class GlobalErrorHandler {
 		Map<String, String> error = new HashMap<String, String>();
 
 		error.put("message", "Parametro '" + name + "' não informado");
+
+		return error;
+	}
+
+	@ExceptionHandler(CustomerDataNotFoundException.class)
+	ResponseEntity<Object> onCustomerDataNotFoundException(CustomerDataNotFoundException e) {
+        return ResponseEntity.notFound().build();
+	}
+
+	@ResponseBody
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(InvalidValidationTokenException.class)
+	public Map<String, String> onInvalidValidationTokenException(InvalidValidationTokenException e) {
+		Map<String, String> error = new HashMap<String, String>();
+
+		error.put("message", e.getMessage());
 
 		return error;
 	}

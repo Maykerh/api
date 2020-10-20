@@ -3,7 +3,6 @@ package com.zup.api.error;
 import com.zup.api.error.exception.ProposalAlreadyAcceptedException;
 import com.zup.api.error.exception.ProposalCustomerAddressNotFoundException;
 import com.zup.api.error.exception.ProposalCustomerAlreadyHasDocumentException;
-import com.zup.api.error.exception.ProposalCustomerDataNotFoundException;
 import com.zup.api.error.exception.ProposalCustomerDocumentNotFoundException;
 import com.zup.api.error.exception.ProposalNotFoundException;
 
@@ -19,12 +18,6 @@ class ProposalErrorHandler {
 	ResponseEntity<Object> onProposalNotFoundException(ProposalNotFoundException e) {
         return ResponseEntity.notFound().build();
 	}
-    
-    @ResponseBody
-	@ExceptionHandler(ProposalCustomerDataNotFoundException.class)
-	ResponseEntity<Object> onProposalClientDataNotFoundException(ProposalCustomerDataNotFoundException e) {
-        return ResponseEntity.unprocessableEntity().body(e.getMessage());
-    }
 
     @ResponseBody
 	@ExceptionHandler(ProposalCustomerAddressNotFoundException.class)
