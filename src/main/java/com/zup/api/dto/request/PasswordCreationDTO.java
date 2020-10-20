@@ -21,8 +21,8 @@ public class PasswordCreationDTO {
 
     @NotBlank(message = "Campo 'Senha' é obrigatório")
     @Pattern(
-        regexp = "^(?=.*[A-Z])(?=.*[!@#$&*._\\-\\+])(?=.*[0-9])(?=.*[a-z]).{8,32}$",
-        message = "A senha deve conter no mínimo 8 caracteres, uma letra maiúscula, uma minúscula, um número e um caracter especial"
+        regexp = "^(?=.*[A-Z])(?=.*[!@#$&*._\\-\\+])(?=.*[0-9])(?=.*[a-z]).{8, 32}$",
+        message = "A senha deve conter de 8 a 32 caracteres, uma letra maiúscula, uma minúscula, um número e um caracter especial"
     )
     private String password;
 }
