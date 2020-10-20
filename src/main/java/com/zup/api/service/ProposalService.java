@@ -17,7 +17,6 @@ import com.zup.api.error.exception.ProposalCustomerDocumentNotFoundException;
 import com.zup.api.error.exception.ProposalNotFoundException;
 import com.zup.api.repository.AddressRepository;
 import com.zup.api.repository.CustomerRepository;
-import com.zup.api.repository.AccountRepository;
 import com.zup.api.repository.ProposalRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,13 +108,13 @@ public class ProposalService {
 
         Customer customer = proposal.getCustomer();
 
-        proposal.checkCustomerDocumentStep();
-
-        this.checkDocumentExists(customer.getDocumentImage());
-
         ProposalDataDTO proposalDataDTO = new ProposalDataDTO();
+
         proposalDataDTO.setCustomer(CustomerDTO.fromEntity(customer));
-        proposalDataDTO.setAddress(AddressDTO.fromEntity(customer.getAddress()));
+
+        if (customer.getAddress() != null) {
+            proposalDataDTO.setAddress(AddressDTO.fromEntity(customer.getAddress()));
+        }
 
         return proposalDataDTO;
     }

@@ -2,8 +2,6 @@ package com.zup.api.service;
 
 import java.math.BigDecimal;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import com.zup.api.entity.Account;
 import com.zup.api.entity.Customer;

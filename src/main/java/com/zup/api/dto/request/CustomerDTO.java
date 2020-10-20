@@ -9,6 +9,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zup.api.entity.Customer;
 import com.zup.api.utils.DTOMapper;
 import com.zup.api.validation.MinimumAge;
@@ -32,6 +33,7 @@ public class CustomerDTO {
 
     @NotNull(message = "Campo 'data de nascimento' é obrigatório")
     @MinimumAge
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
 
     @NotBlank(message = "Campo 'CPF' é obrigatório")
